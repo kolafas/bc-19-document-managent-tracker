@@ -36,8 +36,6 @@ function userExist(username) {
 	});
 }
 
-console.log(userExist('juice'));
-
 function authenticate(username, password) {
 	if(userExist(username)){
 		console.log("wrong user");
@@ -55,18 +53,49 @@ function authenticate(username, password) {
 }
 
 function folderCreate(folderName, username) {
-	var folderCreateRef = firebase.database().ref('users/' + username+'/folders');
-	var keyed = folderCreateRef.push();
-	keyed.set({
+	var newFolderName = folderName.split(" ").join("-");
+	var folderCreateRef = firebase.database().ref('/folders/' + username +'/'+ newFolderName);
+	folderCreateRef.push({
 		title:"This is a sample data",
 		link:"http://docs.google.com/sample-link",
 		keywords:["sample", "data", "important"],
-		department:["success", "Training"]
+		department:["first time"]
 	});
 }
 
-folderCreate("Books on nodejs", 'kolafas');
-folderCreate("Books on curl", 'kolafas');
+folderCreate('justice me zip', 'kolafas');
+
+function addTofolder(folderName, username,titles,links,keyword,departments) {
+	var splitTitle = titles.split(" ").join('-');
+	var newTitle = splitTitle;
+	var folderCreateRef = firebase.database().ref('/folders/' + username +'/'+ folderName).push();
+	folderCreateRef.set({
+		title:newTitle,
+		link:links,
+		keywords:keyword,
+		department:departments
+	});
+	for(var i=0; i < departments.length; i++){
+		var addToDepartments = firebase.database().ref('/departments/'+departments[i]+'/'+folderName).child(newTitle);
+		addToDepartments.set({
+			test:1
+		});
+	}
+	for(var i=0; i < keyword.length; i++){
+		var addToDepartments = firebase.database().ref('/keywords/'+keyword[i]+'/'+folderName).child(newTitle);
+		addToDepartments.set({
+			test:1
+		});
+	}
+}
+
+function findByKeywords(keywordName, folderName){
+
+}
+
+var words = 'Nodejs,church,first';
+var keyword =  words.split(",");
+addTofolder('Justice-folder', 'kolafas','Contract why it cools','http://docs.google.com/',keyword,['sucess','true','soup']);
 
 function listFolders(username) {
 	var listFolderRef = firebase.database().ref('users/' + username +'/folders');
@@ -75,7 +104,6 @@ function listFolders(username) {
 	});
 }
 
-listFolders('kolafas');
 
 function checkDuplicateFolder(folderName, username){
 	const check = firebase.database().ref('users/'+ username +'folders').child(folderName);
