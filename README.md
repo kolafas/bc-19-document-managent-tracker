@@ -50,7 +50,7 @@ DATABASE_URL=https://document-manager-6df6d.firebaseio.com
 STORAGE_BUCKET=https://sample-database.firebaseio.com
 
 
-DOMAIN=document-manager.eu.auth0.com
+DOMAIN=docwqwqwt-mawnsdagddsfor.eu.auth0.com
 
 CLIENT_ID=n6fAsjtap6aio8EhoWKHgEYHptFESo2l
 
