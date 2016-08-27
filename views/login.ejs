@@ -22,22 +22,17 @@
   <div class="login-box-body">
     <p class="login-box-msg">Sign in to start your session</p>
 
-    <form action="" method="post">
+    <form action="/loginAuth" method="post">
       <div class="form-group has-feedback">
-        <input type="email" class="form-control" placeholder="Email">
+        <input type="text" class="form-control" id="email" name="username" placeholder="Username">
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <input type="password" class="form-control" placeholder="Password">
+        <input type="text" class="form-control" name="pass" id="password" placeholder="Password">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">
         <div class="col-xs-8">
-          <div class="checkbox icheck">
-            <label>
-              <input type="checkbox"> Remember Me
-            </label>
-          </div>
         </div>
         <!-- /.col -->
         <div class="col-xs-4">
@@ -49,9 +44,9 @@
 
     <div class="social-auth-links text-center">
       <p>- OR -</p>
-      <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using
+      <a href="#" class="signin-google-popup btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using
         Facebook</a>
-      <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using
+      <a href="#" class="signin-twitter-popup btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using
         Google+</a>
     </div>
     <!-- /.social-auth-links -->
@@ -64,7 +59,59 @@
 </div>
 <!-- /.login-box -->
 
-<script src="/javascripts/jquery-2.2.3.min.js"></script>
+<script src="/javascripts/auth0-6.7.min.js"></script>
+<script src="/javascripts/jquery-2.2.3.min.js"></script>t>
+<script>
+  var auth0 = new Auth0({
+    domain:         'document-manager.eu.auth0.com',
+    clientID:       'n6fAsjtap6aio8EhoWKHgEYHptFESo2l',
+    callbackURL:    'http://localhost:8000/callback'
+  });
+
+  // sign-in with social provider with plain redirect
+ // $('.signin-google').on('click', function() {
+   // auth0.signin({connection: 'google-oauth2'}); // use connection identifier
+ // });
+
+  
+
+  // sign-in with social provider using a popup (window.open)
+  $('.signin-google-popup').on('click', function() {
+    auth0.signin({popup: true, connection: 'google-oauth2'}, 
+                function(err, profile, id_token, access_token, state) {
+                      store the profile and id_token in a cookie or local storage
+                        $.cookie('profile', profile);
+                        $.cookie('id_token', id_token);
+                });
+  });
+
+
+  $('.signin-twitter-popup').on('click', function() {
+    auth0.signin({popup: true, connection: 'twitter-oauth2'}, 
+                function(err, profile, id_token, access_token, state) {
+                      store the profile and id_token in a cookie or local storage
+                        $.cookie('profile', profile);
+                        $.cookie('id_token', id_token);
+                });
+  });
+
+  $('.signin-db').on('click', function() {
+    auth0.signin({
+      connection: 'foo', 
+      username: 'bar', 
+      password: 'foobar'
+    },
+    function (err, profile, id_token, access_token, state) {
+      /* 
+          store the profile and id_token in a cookie or local storage
+            $.cookie('profile', profile);
+            $.cookie('id_token', id_token);
+        */
+    });
+  });
+</script>
+
+
 <!-- Bootstrap 3.3.6 -->
 <script src="/javascripts/bootstrap.min.js"></script>
 <!-- iCheck -->

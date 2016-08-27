@@ -3,7 +3,9 @@ var router = express.Router();
 var firebase = require("firebase");
 var axios = require('axios');
 var dotenv = require("dotenv").config;
-var passwordHash = require('password-hash');
+
+
+var requireLogin = require('./requiresLogin');
 
 var config = {
     apiKey: process.env.API_KEY,
@@ -12,65 +14,81 @@ var config = {
     storageBucket: process.env.STORAGE_BUCKET,
 };
 
- var app = firebase.initializeApp(config);
-/* GET /todos listing. */
+ var apps = firebase.initializeApp(config);
 
-userExist = (username) => {
-	var checkUser = firebase.database().ref('users').child(username);
-	checkUser.on('value', function(snapshot) {
-		var snap = snapshot.exists();
-		if(!snapshot.exists()) {
-			console.log(false);
-		}
-		return true;
-	});
-}
 
-router.get('/signup', function(req, res, next) {
-	res.render('register',{data:"Welcome"});
+router.get('/', (req, res, next) => {
+	res.render('starter', {data:"me"});
 });
+
+
+
+
+router.get('/user', requireLogin,function (req, res, next) {
+	var data = req.user;
+	var nickname = data.nickname.split(" ").join("");
+	console.log(data.picture);
+	var  storeUser = firebase.database().ref('/users/'+nickname);
+	storeUser.on('value', snapshot => {
+		//checking if users exist already
+		if(!snapshot.exist){
+			storeUser.set({
+				email:data._json.email,
+				nickname:nickname,
+				picture:data.picture
+			});
+			//res.redirect('/home/folders');
+		}
+	});
+	req.session.picture = data.picture;
+	req.session.username = nickname;
+	res.redirect('/home');
+	next();
+});
+
+router.get('/home', requireLogin,function(req, res, next) {
+	var listFolderRef = firebase.database().ref('/folders/' + req.params.user_id+'/Justice-folder');
+	console.log(req.session.username);
+	var data = {
+		name:req.session.username,
+		picture:req.session.picture
+	}
+	res.render('starter', {datas:data});
+	next();
+});
+
+router.get('/home/folders', function(req, res, next) {
+  var listFolderRef = firebase.database().ref('/folders/' + req.params.user_id+'/Justice-folder');
+	axios.get(listFolderRef.toString() + '.json?orderBy="departments"&equalTo="success"&print=pretty')
+		.then(check =>{
+			var data = check.data;
+			console.log(data);
+			res.render('starter',{folders:data});
+		});
+});
+
+
+router.post('/home/folder/create/', requireLogin, function(req, res, next) {
+	var repoName = req.body.repoName;
+	var newRepoName = repoName.split(" ").join("-");
+	var createFolder = firebase.database().ref('/folders/'+req.session.username).child(newRepoName);
+	createFolder.set({
+		folderName:req.body.repoName,
+		desc:req.body.repoDesc
+	});
+	res.redirect('/home');
+});
+
 
 router.get('/login', (req, res, next) => {
-	res.render('login', {data:"welcome"});
+	res.render('login2', {data:"welcome"});
 });
-
-router.post('/authenicate', (req, res, next) => {
-	if(typeof req.body.username !== 'string' || typeof req.body.firstName !== 'string' || typeof req.body.surName !== 'string' || typeof req.body.email !== 'string') {
-		/**
-		 * Give error when username is not a string
-		 */
-		res.render("register", {error:"Opps!!, looks like you are filling the wrong data."});
-	}
-	var checkUserRef = firebase.database().ref('/users/'+req.body.username);
-	checkUserRef.on('value', snapshot => {
-		if(snapshot.exists()){
-			res.redirect('/signup');
-		}
-	});
-	if(req.body.pass !== req.body.retypePass) {
-		res.redirect('/signup');
-	}else {
-		var hashedPass = passwordHash.generate(req.body.pass);
-		var userSignupRef = firebase.database().ref('/users/'+req.body.username);
-		userSignupRef.set({
-			firstName:req.body.firstName,
-			surName:req.body.surName,
-			regDate:firebase.database.ServerValue.TIMESTAMP,
-			email:req.body.email,
-			password:hashedPass,
-			username:req.body.username
-		});
-		res.redirect('/login');
-	}
-});
-
-
 
 router.post('/login', function(req, res, next) {
   if(userExist(req.body.username)){
 		res.render('register', {error:"Username is taken"});
 	}
-	var usersRef = firebase.database().ref('users/' + req.body.username);
+	var usersRef = firebase.database().ref('/users/' + req.body.username);
 	var check = usersRef;
 	usersRef.on('value', function(snapshot) {
 		if(password === snapshot.val().password) {
@@ -81,14 +99,5 @@ router.post('/login', function(req, res, next) {
 	});
 });
 
-router.get('/:user_id/folders', function(req, res, next) {
-  var listFolderRef = firebase.database().ref('/folders/' + req.params.user_id+'/Justice-folder');
-	axios.get(listFolderRef.toString() + '.json?orderBy="departments"&equalTo="success"&print=pretty')
-		.then(res =>{
-			var data = res.data;
-			console.log(data);
-			res.render('index', {mydata:data});
-		});
-});
 
 module.exports = router;

@@ -1,0 +1,22 @@
+<html>
+  <head>
+
+  </head>
+  <body>
+   <script src="/javascripts/lock.min.js"></script>
+    <script type="text/javascript">
+  var lock = new Auth0Lock('n6fAsjtap6aio8EhoWKHgEYHptFESo2l', 'document-manager.eu.auth0.com', {
+    auth: {
+      redirectUrl: '',
+      responseType: 'code',
+      params: {
+        scope: 'openid email' // Learn about scopes: https://auth0.com/docs/scopes
+      }
+    }
+  });
+</script>
+<button onclick="lock.show();">Login</button>
+
+
+  </body>
+</html>
