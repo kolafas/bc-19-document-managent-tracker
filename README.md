@@ -35,6 +35,11 @@ Make use of the variables provided to you by [firebase](https://firebase.google.
 Create a ```.env ``` file  in your the root folder of the app 
 Add the data in the ```.env` file as specified from your database
 
+## Adding variables from Auth0
+The authenication provider for this app is auth0, so you have to get the configurations keys
+
+Add them to the `.env` file
+
 ```
 API_KEY=huk516791829n726812hj1928j1
 
@@ -43,6 +48,19 @@ AUTH_DOMAIN=sample-database.firebaseapp.com
 DATABASE_URL=https://document-manager-6df6d.firebaseio.com
 
 STORAGE_BUCKET=https://sample-database.firebaseio.com
+
+
+DOMAIN=document-manager.eu.auth0.com
+
+CLIENT_ID=n6fAsjtap6aio8EhoWKHgEYHptFESo2l
+
+CLIENT_SECRET=657882212/-213-=3=1=2-101313
+
+CALLBACK_URL=http://yoursite.com/authorize
+
+//Add this call back url the Auth0 settings
+
+SESSION_SECRET=MEv1LGpYjxgBubvR5_zHHhvyT3qsJxfggHO7KLZPU5nkgbCXDDnncx_j0BVs7q-y
 ```
 
 ##To run the app with the environment variables
