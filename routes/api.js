@@ -80,8 +80,44 @@ router.post('/home/folder/create/', requireLogin, function(req, res, next) {
 });
 
 
+router.get('/home/folders/view/:user_id', requireLogin, function(req, res, next) {
+	var data = {
+		name:req.session.username,
+		picture:req.session.picture,
+		folderName:req.params.user_id
+	}
+	res.render('documents', {datas:data});
+	next();
+});
+
+router.get('/home/logout', requireLogin, function(req, res, next) {
+	res.redirect('https://document-manager.eu.auth0.com/v2/logout?returnTo=http://www.google.com');
+});
+
+router.post('/home/docs/create/:folder_name', requireLogin, function(req, res, next) {
+	var keyword = req.body.keyword;
+	var newKeyword = keyword.split(", ");
+	var title = req.body.title;
+	var newTitle = title.split(" ").join("-");
+	var createFolder = firebase.database().ref('/documents/'+req.session.username).child(req.params.folder_name).push();
+	createFolder.set({
+		title:newTitle,
+		link:req.body.link,
+		keywords:newKeyword,
+		department:req.body.department,
+		desc:req.body.desc,
+		dateCreate:firebase.database.ServerValue.TIMESTAMP
+	});
+	var addToDepartment = firebase.database().ref('/departments/'+req.body.department+'/'+req.params.folder_name).child(newTitle).push();
+		addToDepartment.set({
+			test:1
+		});
+	res.redirect("/home/folders/view/"+req.params.folder_name);
+});
+
+
 router.get('/login', (req, res, next) => {
-	res.render('login2', {data:"welcome"});
+	res.render('register', {data:"welcome"});
 });
 
 router.post('/login', function(req, res, next) {
