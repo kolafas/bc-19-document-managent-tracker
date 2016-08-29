@@ -35,7 +35,7 @@ var session = require('express-session');
 
 app.use(cookieParser());
 // See express session docs for information on the options: https://github.com/expressjs/session
-app.use(session({ secret: 'MEv1LGpYgbCXDDnncx_j0xgBubvRjT3qsJxfggHO7KLZPU5nk5_zHHhvyBVs7q-y', resave: false,  saveUninitialized: false }));
+app.use(session({ secret: process.env.SESSION_SECRET, resave: false,  saveUninitialized: false }));
 
 app.use(passport.initialize());
 app.use(passport.session());

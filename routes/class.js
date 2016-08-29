@@ -45,24 +45,27 @@ var client = new elasticsearch.Client({
 			desc:desc,
 			dateCreate:firebase.database.ServerValue.TIMESTAMP
 		});
-		var addToDepartment = firebase.database().ref('/departments/'+department+'/'+folderName).child(newTitle);
+		var addToDepartment = firebase.database().ref('/departments/'+department+'/'+user).child(newTitle);
 			addToDepartment.set({
-			test:1
+			link:link
 		});
 		for(var i=0; i<newKeyword.length; i++){
-			var addToKeyword = firebase.database().ref('/keywords/'+newKeyword[i]+'/'+folderName).child(newTitle);
+			var addToKeyword = firebase.database().ref('/keywords/'+newKeyword[i]+'/'+user).child(newTitle);
 				addToKeyword.set({
-					data:1
+					link:link
 				});
 		}
  	}
 
  	documentManager.prototype.deleteDocument = function (docName, user, folderName) {
- 		var deleteDocumentRef = firebase.database().ref('/documents/'+user+'/folderName').child(docName);
+ 		var deleteDocumentRef = firebase.database().ref('/documents/'+user+'/'+folderName).child(docName);
  			deleteDocumentRef.remove();
  	}
 
- 	
+ 	documentManager.prototype.deleteFolder = function (user, folderName) {
+ 		var deleteFolderRef = firebase.database().ref('/folders/'+user+'/'+folderName);
+ 			deleteFolderRef.remove();
+ 	}
 
 
 
