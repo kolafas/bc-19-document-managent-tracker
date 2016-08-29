@@ -65,19 +65,14 @@ router.get('/login', (req, res, next) => {
 	res.render('register', {data:"welcome"});
 });
 
-router.post('/login', function(req, res, next) {
-  if(userExist(req.body.username)){
-		res.render('register', {error:"Username is taken"});
-	}
-	var usersRef = firebase.database().ref('/users/' + req.body.username);
-	var check = usersRef;
-	usersRef.on('value', function(snapshot) {
-		if(password === snapshot.val().password) {
-			console.log("Successfully logged");
-		}else{
-			console.log("Wrong password");
-		}
-	});
+router.post('/home/deleteDoc/:folder_name', requireLogin, function(req, res, next){
+	documents.deleteDocument(req.body.docName, req.session.username, req.params.folder_name);
+	res.redirect('/home/folders/view/'+req.params.folder_name);
+});
+
+router.post('/home/search/', requireLogin, function(req, res, next){
+	documents.deleteDocument(req.body.docName, req.session.username, req.params.folder_name);
+	res.redirect('/home/folders/view/'+req.params.folder_name);
 });
 
 

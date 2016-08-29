@@ -337,12 +337,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <form action="/home/deleteDoc/<%= datas.folderName %>" method="post">
             <select class="form-control" name="docName">
                 <option>Select a document</option>
-                <option ng-repeat="(key, value) in docsme" value="{{ value.title }}">{{ value.title }}</option>
+                <option ng-repeat="(key, value) in docsme" value="{{ key }}">{{ value.title }}</option>
             </select>
-          </form>
+          
         </div>
         <div class="modal-footer">
-            <button class="btn btn-right btn-success">Delete</button>
+            <button type="submit" class="btn btn-right btn-success">Delete</button>
+            </form>
         </div>
       </div>
     </div>

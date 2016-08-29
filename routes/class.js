@@ -36,7 +36,7 @@ var client = new elasticsearch.Client({
  	documentManager.prototype.addDoc = function (link,keyword, title, folderName, department,desc, user){
 		var newKeyword = keyword.split(", ");
 		var newTitle = title.split(" ").join("-");
-		var createFolder = firebase.database().ref('/documents/'+user).child(folderName).push();
+		var createFolder = firebase.database().ref('/documents/'+user).child(folderName).child(newTitle);
 			createFolder.set({
 			title:newTitle,
 			link:link,
@@ -58,41 +58,12 @@ var client = new elasticsearch.Client({
  	}
 
  	documentManager.prototype.deleteDocument = function (docName, user, folderName) {
- 		
+ 		var deleteDocumentRef = firebase.database().ref('/documents/'+user+'/folderName').child(docName);
+ 			deleteDocumentRef.remove();
  	}
 
- 	documentManager.prototype.searchByKeyword  = function (keyword, folderName, query) {
- 		var searchByKeyword = firebase.database().ref('/keywords/'+keyword+'/'+folderName);
- 		var keywordRef = firebase.database.ref('/keywords');
-		keywordRef.on('child_added', upsert);
-		keywordRef.on('child_changed', upsert);
-		keywordRef.on('child_removed', remove);
+ 	
 
-		function upsert(snapshot){
-	    		client.index({
-	        	index: 'firebase',
-	        	type: 'users',
-	        	id: snapshot.key(),
-	        	body: snapshot.val()
-    		}, function(err, response){
-        		if(err){
-            		console.log("Error indexing user : " + error);
-        		}
-    		});
-		}
-
-		function remove(snapshot){
-	    		client.delete({
-	        	index: 'firebase',
-	        	type: 'users',
-	        	id: snapshot.key()
-    		}, function(error, response){
-       	 			if(error){
-            			console.log("Error deleting user : " + error);
-        			}
-    			});
-		}
- 	}
 
 
 module.exports = documentManager;
