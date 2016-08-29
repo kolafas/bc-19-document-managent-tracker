@@ -46,7 +46,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <span class="sr-only">Toggle navigation</span>
       </a>
       <!-- Navbar Right Menu -->
+
+         <form class="navbar-form navbar-left" role="search">
+              <div class="form-group">
+                <div class="input-group">
+                  <span class="input-group-btn">
+                    <select name="searchBy" class="btn btn-info" id="navbar-search-input" style="width:170px;">
+                      <option value="keyword">Search By Keyword</option>
+                      <option value="department">Search By Department</option>
+                      <option value="document">Search By Document</option>
+                    </select>
+                  </span>
+                  <input type="text" id="navbar-search-input" style="width:400px" placeholder="Type then press Enter.." class="form-control">
+                  <span class="input-group-btn">
+        <button class="btn btn-info" type="button">Go!</button>
+      </span>
+                </div>
+              </div>
+          </form>
+
+
       <div class="navbar-custom-menu">
+
+
         <ul class="nav navbar-nav">
           <!-- Messages: style can be found in dropdown.less-->
           
@@ -83,10 +105,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </div>
               </li>
             </ul>
-          </li>
-          <!-- Control Sidebar Toggle Button -->
-          <li>
-            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
           </li>
         </ul>
       </div>
@@ -126,8 +144,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
       
     </section>
     <div class="col-md-12">
-        <a href="#add-doc" class="pull-right btn btn-default btn-md" data-toggle="modal" style="margin-bottom:20px;"><i class="fa fa-plus"></i>  Add Document</a>
+         <a href="#removeDoc" class="pull-right btn btn-default btn-md" data-toggle="modal" style="margin-bottom:20px;"><i class="fa fa-minus"></i>  Remove Document</a>
+        <a href="#add-doc" class="pull-right btn btn-default btn-md" style="margin-right:30px;" data-toggle="modal" style="margin-bottom:20px;"><i class="fa fa-plus"></i>  Add Document</a>
+       
     </div>
+
+
     
 
     <!-- Main content -->
@@ -138,15 +160,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="box-header with-border">
               <h3 class="box-title">Documents</h3>
 
-              <div class="box-tools">
-                <div class="input-group input-group-sm" style="width: 150px;">
-                  <input type="text" ng-model="docSearch[value]" class="form-control pull-right" placeholder="Search">
-
-                  <div class="input-group-btn">
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                  </div>
-                </div>
-              </div>
+              
             </div>
             <!-- /.box-header -->
             <div class="box-body table-responsive">
@@ -154,17 +168,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <h3 class="text-center">No document Yet</h3>
             </div>
               <div class="col-md-6" ng-repeat="(key, value) in docs">
-                <div class="box box-success">
-                    <div class="box-header with-border">
+                <div class="box box-primary">
+                    <div class="box-header with-border bg-blue text-white">
                         <h4 class="text-center">{{ value.title }}<br/><i style="font-size:13px" class="text-center">Department: {{ value.department }}</i></h4>
                         
                     </div>
-                    <div class="box-body">
-                        <p class='text-center' style="width: 270px;white-space:nowrap;overflow:hidden;text-overflow: ellipsis;">{{ value.desc }}</p>
+                    <div class="box-body" style="border-radius:0px;">
+                        <p class='text-center' style="width:270px;white-space:nowrap;overflow:hidden;text-overflow: ellipsis;">{{ value.desc }}</p>
                     </div>
-                    <div class="box-footer">
-                          <a class="badge bg-red" ng-repeat='c1 in value.keywords track by $index' href="#">{{ c1 }}</a>&nbsp;&nbsp;
-                        <a href='{{ value.link }}' class="btn btn-success pull-right btn-flat">View Doc</a>
+                    <div class="box-footer bg-light-blue">
+                          <span class="badge bg-red" style="margin-top:10px;cursor:pointer;margin-right:8px" ng-repeat='c1 in value.keywords track by $index' href="#">{{ c1 }}</span>&nbsp;&nbsp;
+                        <a href='{{ value.link }}' class="btn btn-default pull-right btn-flat">View</a>
                     </div>
                 </div>
               </div>
@@ -174,11 +188,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- /.box -->
         </div>
         <div class="col-md-4" ng-controller="departmentList">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
+            <div class="panel panel-primary" style="border-radius:0px">
+                <div class="panel-heading" style="border-radius:0px">
                     Departments
                 </div>
-               <a class="list-group-item" ng-repeat="(key, value) in department">{{ key }}</a>
+               <a class="list-group-item" data-toggle="modal" id="sharp" ng-repeat="(key, value) in department">{{ key }} <span data-toogle="modal" data-target="#getDocs" class="badge bg-yellow" style="cursor:pointer">View</span></a>
     
             </div>
         </div>
@@ -282,6 +296,59 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <div class="control-sidebar-bg"></div>
 </div>
 
+<div class="modal modal-default fade" id="getDocs">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" id="docsHeader">
+
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6" ng-repeat="(key, value) in docs">
+                        <div class="box box-success">
+                            <div class="box-header with-border">
+                                <h4 class="text-center">{{ key }}<br/><i style="font-size:13px" class="text-center">Department: {{ value.department }}</i></h4>
+                                
+                            </div>
+                            <div class="box-body">
+                                <p class='text-center' style="width: 270px;white-space:nowrap;overflow:hidden;text-overflow: ellipsis;">{{ value.desc }}</p>
+                            </div>
+                            <div class="box-footer">
+                                  <a class="badge bg-red" ng-repeat='c1 in value.keywords track by $index' href="#">{{ c1 }}</a>&nbsp;&nbsp;
+                                <a href='{{ value.link }}' class="btn btn-success pull-right btn-flat">View Doc</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-default fade" id="removeDoc">
+    <div class="modal-dialog modal-sm" ng-controller="docsme">
+      <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            </button>
+            <h4 class="modal-title">Delete Document</h4>
+        </div>
+        <div class="modal-body">
+          <form action="/home/deleteDoc/<%= datas.folderName %>" method="post">
+            <select class="form-control" name="docName">
+                <option>Select a document</option>
+                <option ng-repeat="(key, value) in docsme" value="{{ value.title }}">{{ value.title }}</option>
+            </select>
+          </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-right btn-success">Delete</button>
+        </div>
+      </div>
+    </div>
+</div> 
+
+
 <div class="modal modal-default fade" id="add-doc">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -332,6 +399,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
 <script src="/javascripts/jquery-2.2.3.min.js"></script>
 <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
 <script>
     var app = angular.module('doc-man', []);
     var user = document.getElementById('username-get').innerHTML;
@@ -344,16 +412,44 @@ scratch. This page gets rid of all links and provides the needed markup only.
     });
 });
 
+    app.controller('docsme', function($scope, $http) {
+      $http.get('https://document-manager-6df6d.firebaseio.com/documents/'+user+'/'+folder+'.json')
+        .success(function(response) {
+          $scope.docsme = response;
+    });
+  });
+
   app.controller('departmentList', function($scope, $http) {
       $http.get('https://document-manager-6df6d.firebaseio.com/departments.json')
           .success(function(response) {
               $scope.department = response;
           });
     });
+
+
+  $('#sharp').click(function(){
+      $('#getDocs').modal('show');
+  });
+
+  
 </script>
 
+<script type="text/javascript">
+  
+  $('#getDocs').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this);
+  modal.find('#docsHeader').text('New message to ' + recipient);
+});
+
+</script>
+
+
 <!-- Bootstrap 3.3.6 -->
-<script src="/javascripts/bootstrap.min.js"></script>
+
 
 <script src="/javascripts/app.min.js"></script>
 
