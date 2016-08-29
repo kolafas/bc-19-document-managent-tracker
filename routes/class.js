@@ -14,9 +14,6 @@ var requireLogin = require('./requiresLogin');
 
 var apps = firebase.initializeApp(config);
 
-var client = new elasticsearch.Client({
-    host: 'localhost', port: 8000
-});
 
  function documentManager() {
 
