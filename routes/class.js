@@ -3,7 +3,6 @@ var router = express.Router();
 var firebase = require("firebase");
 var axios = require('axios');
 var dotenv = require("dotenv").config;
-var elasticsearch = require('elasticsearch');
 var config = {
     apiKey: process.env.API_KEY,
     authDomain: process.env.AUTH_DOMAIN,
