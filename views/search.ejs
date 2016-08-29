@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html>
+<head>
+  <meta charset="utf-8">
+  <met<meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title><%= datas.name %> | Folders</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="/stylesheets/css/materialie.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/stylesheets/AdminLTE.min.css">
+  <link rel="stylesheet" href="/stylesheets/skins/_all-skins.min.css">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="/stylesheets/iCheck/flat/blue.css">
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini" ng-app="doc-man">
+<div class="wrapper">
+
+  <!-- Main Header -->
+  <header class="main-header">
+
+    <!-- Logo -->
+    <a href="/home" class="logo">
+      <!-- mini logo for sidebar mini 50x50 pixels -->
+      <span class="logo-mini"><b>D</b>ST</span>
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><b>Doc</b>STORE</span>
+    </a>
+
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-static-top" role="navigation">
+      <!-- Sidebar toggle button-->
+      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+      </a>
+      <!-- Navbar Right Menu -->
+
+         <form class="navbar-form navbar-left" role="search">
+              <div class="form-group">
+                <div class="input-group">
+                  <span class="input-group-btn">
+                    <select class="btn btn-info" id="navbar-search-input" style="width:170px;">
+                      <option>Search By Keyword</option>
+                      <option>Search By Department</option>
+                      <option>Search By Document</option>
+                    </select>
+                  </span>
+                  <input type="text" id="navbar-search-input" style="width:400px" placeholder="Type then press Enter.." class="form-control">
+                  <span class="input-group-btn">
+        <button class="btn btn-info" type="button">Go!</button>
+      </span>
+                </div>
+              </div>
+          </form>
+
+
+      <div class="navbar-custom-menu">
+
+
+        <ul class="nav navbar-nav">
+          <!-- Messages: style can be found in dropdown.less-->
+          
+          <!-- /.messages-menu -->
+
+          <!-- Notifications Menu -->
+         
+          <!-- Tasks Menu -->
+          
+          <!-- User Account Menu -->
+          <li class="dropdown user user-menu">
+            <!-- Menu Toggle Button -->
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <!-- The user image in the navbar-->
+              <img src=<%- JSON.stringify(datas.picture) %> class="user-image" alt="User Image">
+              <!-- hidden-xs hides the username on small devices so only the image appears. -->
+              <span style="text-transform:uppercase"><%= datas.name %></span>
+            </a>
+            <ul class="dropdown-menu">
+              <!-- The user image in the menu -->
+              <li class="user-header">
+                <img src=<%- JSON.stringify(datas.picture) %> class="img-circle" alt="User Image">
+                <p id="username-get" class="hidden-lg"><%= datas.name %></p>
+                <p style="text-transform:uppercase">
+                  <%= datas.name %>
+                </p>
+              </li>
+              <!-- Menu Body -->
+              
+              <!-- Menu Footer-->
+              <li class="user-footer">
+                <div class="pull-right">
+                  <a href="/home/logout" class="btn btn-default btn-flat">Sign out</a>
+                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar">
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+
+      <!-- Sidebar user panel (optional) -->
+      
+
+      
+      <!-- /.search form -->
+
+      <!-- Sidebar Menu -->
+      <ul class="sidebar-menu">
+      <li class="active"><a href="#create-repo" data-toggle="modal"><i class="fa fa-2x fa-plus-circle"></i>&nbsp;&nbsp;&nbsp;&nbsp;<span style="padding-top:-20px;"><b>Create Repository</b></span></a></li>
+      <li><a href="/home" data-toggle="modal"><i class="fa fa-2x  fa-folder-open"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="padding-top:-20px;"><b>Respositories</b></span></a></li>
+        
+      </ul>
+      <!-- /.sidebar-menu -->
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header" style="margin-bottom:10px;">
+      <h1>
+        Docs
+      </h1>
+      
+      
+    </section>
+    <div class="col-md-12">
+        <a href="#add-doc" class="pull-right btn btn-default btn-md" data-toggle="modal" style="margin-bottom:20px;"><i class="fa fa-plus"></i>  Add Document</a>
+    </div>
+    
+
+    <!-- Main content -->
+    <section class="content" ng-controller="docList">
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">Documents</h3>
+
+              <div class="box-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                  <input type="text" ng-model="docSearch[value]" class="form-control pull-right" placeholder="Search">
+
+                  <div class="input-group-btn">
+                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive">
+            <div class="col-md-12" ng-if="docs === null">
+                <h3 class="text-center">No document Yet</h3>
+            </div>
+              <div class="col-md-6" ng-repeat="(key, value) in docs">
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                        <h4 class="text-center">{{ value.title }}<br/><i style="font-size:13px" class="text-center">Department: {{ value.department }}</i></h4>
+                        
+                    </div>
+                    <div class="box-body">
+                        <p class='text-center' style="width: 270px;white-space:nowrap;overflow:hidden;text-overflow: ellipsis;">{{ value.desc }}</p>
+                    </div>
+                    <div class="box-footer">
+                          <span class="badge bg-red" style="cursor:pointer;margin-right:8px" ng-repeat='c1 in value.keywords track by $index' href="#">{{ c1 }}</span>&nbsp;&nbsp;
+                        <a href='{{ value.link }}' class="btn btn-success pull-right btn-flat">View Doc</a>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <div class="col-md-4" ng-controller="departmentList">
+            <div class="panel panel-primary" style="border-radius:0px">
+                <div class="panel-heading" style="border-radius:0px">
+                    Departments
+                </div>
+               <a class="list-group-item" data-toggle="modal" id="sharp" ng-repeat="(key, value) in department">{{ key }} <span data-toogle="modal" data-target="#getDocs" class="badge bg-red" style="cursor:pointer">View</span></a>
+    
+            </div>
+        </div>
+      </div>
+    </section>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <!-- To the right -->
+    <div class="pull-right hidden-xs">
+      Anything you want
+    </div>
+    <!-- Default to the left -->
+    <strong>Copyright &copy; 2016 <a href="/">DocStore</a>.</strong> All rights reserved.
+  </footer>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Create the tabs -->
+    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+      <li class="active"><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+      <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <!-- Home tab content -->
+      <div class="tab-pane active" id="control-sidebar-home-tab">
+        <h3 class="control-sidebar-heading">Recent Activity</h3>
+        <ul class="control-sidebar-menu">
+          <li>
+            <a href="javascript::;">
+              <i class="menu-icon fa fa-birthday-cake bg-red"></i>
+
+              <div class="menu-info">
+                <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
+
+                <p>Will be 23 on April 24th</p>
+              </div>
+            </a>
+          </li>
+        </ul>
+        <!-- /.control-sidebar-menu -->
+
+        <h3 class="control-sidebar-heading">Tasks Progress</h3>
+        <ul class="control-sidebar-menu">
+          <li>
+            <a href="javascript::;">
+              <h4 class="control-sidebar-subheading">
+                Custom Template Design
+                <span class="pull-right-container">
+                  <span class="label label-danger pull-right">70%</span>
+                </span>
+              </h4>
+
+              <div class="progress progress-xxs">
+                <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
+              </div>
+            </a>
+          </li>
+        </ul>
+        <!-- /.control-sidebar-menu -->
+
+      </div>
+      <!-- /.tab-pane -->
+      <!-- Stats tab content -->
+      <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
+      <!-- /.tab-pane -->
+      <!-- Settings tab content -->
+      <div class="tab-pane" id="control-sidebar-settings-tab">
+        <form method="post">
+          <h3 class="control-sidebar-heading">General Settings</h3>
+
+          <div class="form-group">
+            <label class="control-sidebar-subheading">
+              Report panel usage
+              <input type="checkbox" class="pull-right" checked>
+            </label>
+
+            <p>
+              Some information about this general settings option
+            </p>
+          </div>
+          <!-- /.form-group -->
+        </form>
+      </div>
+      <!-- /.tab-pane -->
+    </div>
+  </aside>
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>
+
+<div class="modal modal-default fade" id="getDocs">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" id="docsHeader">
+
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6" ng-repeat="(key, value) in docs">
+                        <div class="box box-success">
+                            <div class="box-header with-border">
+                                <h4 class="text-center">{{ value.title }}<br/><i style="font-size:13px" class="text-center">Department: {{ value.department }}</i></h4>
+                                
+                            </div>
+                            <div class="box-body">
+                                <p class='text-center' style="width: 270px;white-space:nowrap;overflow:hidden;text-overflow: ellipsis;">{{ value.desc }}</p>
+                            </div>
+                            <div class="box-footer">
+                                  <a class="badge bg-red" ng-repeat='c1 in value.keywords track by $index' href="#">{{ c1 }}</a>&nbsp;&nbsp;
+                                <a href='{{ value.link }}' class="btn btn-success pull-right btn-flat">View Doc</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-default fade" id="add-doc">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        </button>
+        <h4 class="modal-title">Add document</h4>
+      </div>
+      <div class="modal-body">
+          <form method="post" action="/home/docs/create/<%= datas.folderName %>">
+            <input type="hidden" id='folderName' value="<%= datas.folderName %>"/>
+            <label>Title Of document<span class="text-red">*</label>
+            <input type="text" maxlength="24" class="form-control" name="title" placeholder="Title of document" required><br/>
+             <label>Link of document<span class="text-red">*</label>
+            <input type="url" class="form-control" name="link" value="http://" placeholder="http://" required><br/>
+            <label>Choose a department<span class="text-red">*</span></label>
+            <select class="form-control" name="department">
+
+
+              <option default>Choose a category</option>
+              <option value="Success">Success</option>
+              <option value="Training">Training</option>
+              <option value="Operations">Operations</option>
+              <option value="Finance">Finance</option>
+              <option value="Recruitment">Recruitment</option>
+              <option value="Sales">Sales</option>
+              <option value="Marketing">Marketing</option>
+
+            </select><br/>
+            <label>Keywords:Seperate each word with a comma and space e.g big hat, soup<span class="text-red">*</label>
+            <input type="text" maxlength="24" class="form-control" name="keyword" placeholder="keywords e.g docs, sleep" required><br/>
+            <label>Description <span class="text-red">*</label>
+            <textarea type="text" class="form-control" rows="5" name="desc" placeholder="Write something about this folder" required></textarea>          
+      </div>
+      <div class="modal-footer">
+          <button class="btn btn-danger pull-left btn-flat" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-success pull-right btn-flat">Add</button>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+
+<script src="/javascripts/angular.min.js"></script>
+<script src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
+<script src="/javascripts/jquery-2.2.3.min.js"></script>
+<script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script>
+    var app = angular.module('doc-man', []);
+    var user = document.getElementById('username-get').innerHTML;
+    var folder = document.getElementById('folderName').value;
+    console.log(user);
+    app.controller('docList', function($scope, $http) {
+      $http.get('https://document-manager-6df6d.firebaseio.com/documents/'+user+'/'+folder+'.json')
+        .success(function(response) {
+          $scope.docs = response;
+    });
+});
+
+  app.controller('departmentList', function($scope, $http) {
+      $http.get('https://document-manager-6df6d.firebaseio.com/departments.json')
+          .success(function(response) {
+              $scope.department = response;
+          });
+    });
+
+
+  $('#sharp').click(function(){
+      $('#getDocs').modal('show');
+  });
+
+  
+</script>
+
+<script type="text/javascript">
+  
+  $('#getDocs').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this);
+  modal.find('#docsHeader').text('New message to ' + recipient);
+});
+
+</script>
+
+
+<!-- Bootstrap 3.3.6 -->
+
+
+<script src="/javascripts/app.min.js"></script>
+
+</body>
+</html>
