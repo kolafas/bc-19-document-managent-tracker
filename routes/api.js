@@ -46,7 +46,7 @@ router.get('/home/folders/view/:user_id', requireLogin, function(req, res, next)
 });
 
 router.get('/home/logout', requireLogin, function(req, res, next) {
-	res.redirect('https://document-manager.eu.auth0.com/v2/logout?returnTo=http://www.google.com');
+	res.redirect('https://document-manager.eu.auth0.com/v2/logout');
 });
 
 
