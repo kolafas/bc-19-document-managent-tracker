@@ -177,7 +177,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <p class='text-center' style="width:270px;white-space:nowrap;overflow:hidden;text-overflow: ellipsis;">{{ value.desc }}</p>
                     </div>
                     <div class="box-footer bg-light-blue">
-                          <span class="badge bg-red" style="margin-top:10px;cursor:pointer;margin-right:8px" ng-repeat='c1 in value.keywords track by $index' href="#">{{ c1 }}</span>&nbsp;&nbsp;
+                          <a class="badge bg-red" href="/home/keyword/{{ c1 }}" style="margin-top:10px;cursor:pointer;margin-right:8px" ng-repeat='c1 in value.keywords track by $index' href="">{{ c1 }}</a>&nbsp;&nbsp;
                         <a href='{{ value.link }}' class="btn btn-default pull-right btn-flat">View</a>
                     </div>
                 </div>
@@ -192,7 +192,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="panel-heading" style="border-radius:0px">
                     Departments
                 </div>
-               <a class="list-group-item" data-toggle="modal" id="sharp" ng-repeat="(key, value) in department">{{ key }} <span data-toogle="modal" data-target="#getDocs" class="badge bg-yellow" style="cursor:pointer">View</span></a>
+                <a class="list-group-item text-center" ng-if="departments === null">No Deparments Yet</a>
+               <a class="list-group-item" href="/home/department/{{ value.department }}" id="sharp" ng-repeat="(key, value) in departments">{{ value.department }}<span data-toogle="modal" data-target="#getDocs" class="badge bg-yellow" style="cursor:pointer">View</span></a>
     
             </div>
         </div>
@@ -211,9 +212,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Main Footer -->
   <footer class="main-footer">
     <!-- To the right -->
-    <div class="pull-right hidden-xs">
-      Anything you want
-    </div>
     <!-- Default to the left -->
     <strong>Copyright &copy; 2016 <a href="/">DocStore</a>.</strong> All rights reserved.
   </footer>
@@ -296,34 +294,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <div class="control-sidebar-bg"></div>
 </div>
 
-<div class="modal modal-default fade" id="getDocs">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" id="docsHeader">
 
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6" ng-repeat="(key, value) in docs">
-                        <div class="box box-success">
-                            <div class="box-header with-border">
-                                <h4 class="text-center">{{ key }}<br/><i style="font-size:13px" class="text-center">Department: {{ value.department }}</i></h4>
-                                
-                            </div>
-                            <div class="box-body">
-                                <p class='text-center' style="width: 270px;white-space:nowrap;overflow:hidden;text-overflow: ellipsis;">{{ value.desc }}</p>
-                            </div>
-                            <div class="box-footer">
-                                  <a class="badge bg-red" ng-repeat='c1 in value.keywords track by $index' href="#">{{ c1 }}</a>&nbsp;&nbsp;
-                                <a href='{{ value.link }}' class="btn btn-success pull-right btn-flat">View Doc</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="modal modal-default fade" id="removeDoc">
     <div class="modal-dialog modal-sm" ng-controller="docsme">
@@ -337,12 +308,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <form action="/home/deleteDoc/<%= datas.folderName %>" method="post">
             <select class="form-control" name="docName">
                 <option>Select a document</option>
-                <option ng-repeat="(key, value) in docsme" value="{{ value.title }}">{{ value.title }}</option>
+                <option ng-repeat="(key, value) in docsme" value="{{ key }}">{{ value.title }}</option>
             </select>
-          </form>
+          
         </div>
         <div class="modal-footer">
-            <button class="btn btn-right btn-success">Delete</button>
+            <button type="submit" class="btn btn-right btn-success">Delete</button>
+            </form>
         </div>
       </div>
     </div>
@@ -361,11 +333,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <form method="post" action="/home/docs/create/<%= datas.folderName %>">
             <input type="hidden" id='folderName' value="<%= datas.folderName %>"/>
             <label>Title Of document<span class="text-red">*</label>
-            <input type="text" maxlength="24" class="form-control" name="title" placeholder="Title of document" required><br/>
+            <input type="text" maxlength="24" class="form-control" required="" name="title" placeholder="Title of document" required><br/>
              <label>Link of document<span class="text-red">*</label>
-            <input type="url" class="form-control" name="link" value="http://" placeholder="http://" required><br/>
+            <input type="url" class="form-control" name="link" required="" value="http://" placeholder="http://" required><br/>
             <label>Choose a department<span class="text-red">*</span></label>
-            <select class="form-control" name="department">
+            <select class="form-control" name="department" required="">
 
 
               <option default>Choose a category</option>
@@ -381,7 +353,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <label>Keywords:Seperate each word with a comma and space e.g big hat, soup<span class="text-red">*</label>
             <input type="text" maxlength="24" class="form-control" name="keyword" placeholder="keywords e.g docs, sleep" required><br/>
             <label>Description <span class="text-red">*</label>
-            <textarea type="text" class="form-control" rows="5" name="desc" placeholder="Write something about this folder" required></textarea>          
+            <textarea type="text" class="form-control" rows="5" name="desc" required="" placeholder="Write something about this folder" required></textarea>          
       </div>
       <div class="modal-footer">
           <button class="btn btn-danger pull-left btn-flat" data-dismiss="modal">Cancel</button>
@@ -420,9 +392,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
   });
 
   app.controller('departmentList', function($scope, $http) {
-      $http.get('https://document-manager-6df6d.firebaseio.com/departments.json')
+      $http.get('https://document-manager-6df6d.firebaseio.com/documents/'+user+'/'+folder+'.json')
           .success(function(response) {
-              $scope.department = response;
+              $scope.departments = response;
           });
     });
 
