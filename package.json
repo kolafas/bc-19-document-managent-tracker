@@ -2,9 +2,6 @@
   "name": "zipp",
   "version": "0.0.0",
   "private": true,
-  "scripts": {
-    "start": "node ./bin/www"
-  },
   "dependencies": {
     "axios": "^0.13.1",
     "body-parser": "~1.15.1",
@@ -23,5 +20,5 @@
   },
   "engines": {
     "node": "4.1.1"
-  },
+  }
 }

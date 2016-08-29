@@ -46,14 +46,9 @@ router.get('/home/folders/view/:user_id', requireLogin, function(req, res, next)
 });
 
 router.get('/home/logout', requireLogin, function(req, res, next) {
-	res.redirect('https://document-manager.eu.auth0.com/v2/logout?returnTo=http://www.google.com');
+	res.redirect('https://document-manager.eu.auth0.com/v2/logout?returnTo=https://bc-19-docstore.herokuapp.com/');
 });
 
-router.get('/home/search', requireLogin, function(req, res, next) {
-	if(req.body.searchBy === 'department'){
-		var department 
-	}
-});
 
 router.post('/home/docs/create/:folder_name', requireLogin, function(req, res, next) {
 	documents.addDoc(req.body.link, req.body.keyword, req.body.title, req.params.folder_name, req.body.department, req.body.desc, req.session.username)
@@ -70,10 +65,27 @@ router.post('/home/deleteDoc/:folder_name', requireLogin, function(req, res, nex
 	res.redirect('/home/folders/view/'+req.params.folder_name);
 });
 
-router.post('/home/search/', requireLogin, function(req, res, next){
-	documents.deleteDocument(req.body.docName, req.session.username, req.params.folder_name);
-	res.redirect('/home/folders/view/'+req.params.folder_name);
+router.post('/home/deleteFolder/', requireLogin, function(req, res, next){
+	documents.deleteFolder(req.session.username, req.body.folName);
+	res.redirect('/home');
 });
 
+router.get('/home/keyword/:keyword', requireLogin, function (req, res, next) {
+	var data = {
+		name:req.session.username,
+		picture:req.session.picture,
+		keyword:req.params.keyword
+	}
+	res.render('search', {datas:data});
+});
+
+router.get('/home/department/:department', requireLogin, function (req, res, next) {
+	var data = {
+		name:req.session.username,
+		picture:req.session.picture,
+		department:req.params.department
+	}
+	res.render('searchDept', {datas:data});
+});
 
 module.exports = router;

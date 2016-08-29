@@ -137,69 +137,30 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header" style="margin-bottom:10px;">
-      <h1>
-        Docs
-      </h1>
       
       
     </section>
-    <div class="col-md-12">
-        <a href="#add-doc" class="pull-right btn btn-default btn-md" data-toggle="modal" style="margin-bottom:20px;"><i class="fa fa-plus"></i>  Add Document</a>
-    </div>
     
 
     <!-- Main content -->
-    <section class="content" ng-controller="docList">
+    <section class="content" ng-controller="keywordsList">
       <div class="row">
-        <div class="col-xs-8">
-          <div class="box">
-            <div class="box-header with-border">
-              <h3 class="box-title">Documents</h3>
-
-              <div class="box-tools">
-                <div class="input-group input-group-sm" style="width: 150px;">
-                  <input type="text" ng-model="docSearch[value]" class="form-control pull-right" placeholder="Search">
-
-                  <div class="input-group-btn">
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body table-responsive">
-            <div class="col-md-12" ng-if="docs === null">
-                <h3 class="text-center">No document Yet</h3>
-            </div>
-              <div class="col-md-6" ng-repeat="(key, value) in docs">
-                <div class="box box-success">
-                    <div class="box-header with-border">
-                        <h4 class="text-center">{{ value.title }}<br/><i style="font-size:13px" class="text-center">Department: {{ value.department }}</i></h4>
-                        
+          <h3 class="text-center">Search results for " <%= datas.keyword %> "</h3>
+          <h3 class="text-center" ng-if="keywords === null">
+             You do not have any documents under this keyword
+          </h3>
+          <p class="hidden-lg" id="keywordFor"><%= datas.keyword %></p>
+           <div class="col-md-4" ng-repeat="(key, value) in keywords">
+                        <div class="box box-success">
+                            <div class="box-header with-border">
+                                <h4 class="text-center">{{ key }}<br/></h4>
+                                
+                            </div>
+                            <div class="box-footer">
+                                <a href='{{ value.link }}' class="btn btn-success pull-right btn-flat">Open Document</a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="box-body">
-                        <p class='text-center' style="width: 270px;white-space:nowrap;overflow:hidden;text-overflow: ellipsis;">{{ value.desc }}</p>
-                    </div>
-                    <div class="box-footer">
-                          <span class="badge bg-red" style="cursor:pointer;margin-right:8px" ng-repeat='c1 in value.keywords track by $index' href="#">{{ c1 }}</span>&nbsp;&nbsp;
-                        <a href='{{ value.link }}' class="btn btn-success pull-right btn-flat">View Doc</a>
-                    </div>
-                </div>
-              </div>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
-        </div>
-        <div class="col-md-4" ng-controller="departmentList">
-            <div class="panel panel-primary" style="border-radius:0px">
-                <div class="panel-heading" style="border-radius:0px">
-                    Departments
-                </div>
-               <a class="list-group-item" data-toggle="modal" id="sharp" ng-repeat="(key, value) in department">{{ key }} <span data-toogle="modal" data-target="#getDocs" class="badge bg-red" style="cursor:pointer">View</span></a>
-    
-            </div>
-        </div>
       </div>
     </section>
     <br/>
@@ -215,9 +176,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Main Footer -->
   <footer class="main-footer">
     <!-- To the right -->
-    <div class="pull-right hidden-xs">
-      Anything you want
-    </div>
     <!-- Default to the left -->
     <strong>Copyright &copy; 2016 <a href="/">DocStore</a>.</strong> All rights reserved.
   </footer>
@@ -300,34 +258,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <div class="control-sidebar-bg"></div>
 </div>
 
-<div class="modal modal-default fade" id="getDocs">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" id="docsHeader">
 
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6" ng-repeat="(key, value) in docs">
-                        <div class="box box-success">
-                            <div class="box-header with-border">
-                                <h4 class="text-center">{{ value.title }}<br/><i style="font-size:13px" class="text-center">Department: {{ value.department }}</i></h4>
-                                
-                            </div>
-                            <div class="box-body">
-                                <p class='text-center' style="width: 270px;white-space:nowrap;overflow:hidden;text-overflow: ellipsis;">{{ value.desc }}</p>
-                            </div>
-                            <div class="box-footer">
-                                  <a class="badge bg-red" ng-repeat='c1 in value.keywords track by $index' href="#">{{ c1 }}</a>&nbsp;&nbsp;
-                                <a href='{{ value.link }}' class="btn btn-success pull-right btn-flat">View Doc</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="modal modal-default fade" id="delete-folder">
+    <div class="modal-dialog modal-sm" ng-controller="docsme">
+      <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            </button>
+            <h4 class="modal-title">Delete Document</h4>
         </div>
+        <div class="modal-body">
+          <form action="/home/deleteDoc/<%= datas.folderName %>" method="post">
+            <select class="form-control" name="docName">
+                <option>Select a document</option>
+                <option ng-repeat="(key, value) in docsme" value="{{ key }}">{{ value.title }}</option>
+            </select>
+          
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-right btn-success">Delete</button>
+            </form>
+        </div>
+      </div>
     </div>
-</div>
+</div> 
+
 
 <div class="modal modal-default fade" id="add-doc">
   <div class="modal-dialog">
@@ -384,6 +339,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var app = angular.module('doc-man', []);
     var user = document.getElementById('username-get').innerHTML;
     var folder = document.getElementById('folderName').value;
+    var keywordFor = document.getElementById('keywordFor').innerHTML;
     console.log(user);
     app.controller('docList', function($scope, $http) {
       $http.get('https://document-manager-6df6d.firebaseio.com/documents/'+user+'/'+folder+'.json')
@@ -396,6 +352,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
       $http.get('https://document-manager-6df6d.firebaseio.com/departments.json')
           .success(function(response) {
               $scope.department = response;
+          });
+    });
+
+  app.controller('keywordsList', function($scope, $http) {
+      $http.get('https://document-manager-6df6d.firebaseio.com/keywords/'+keywordFor+'/'+user+'/.json')
+          .success(function(response) {
+              $scope.keywords = response;
           });
     });
 
